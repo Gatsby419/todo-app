@@ -1,0 +1,21 @@
+
+
+
+
+.todolist {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todolistitem {
+  display: flex;
+  justify-content: space-between;
+padding-inline: 20px;
+padding-block: 25px;
+background: grey;
+}
+
+.todolist > li{
+  margin-bottom: 10px;
+}
