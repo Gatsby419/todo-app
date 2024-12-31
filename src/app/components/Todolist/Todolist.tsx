@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import AddTodo from "../AddTodo/AddTodo";
 
 import "./Todolist.css";
+interface AddTodo {
+  title: "string";
+  description: "string";
+  dueDate: "string";
+}
 
 export default function Todolist() {
   const [todolist, setTodolist] = useState([
@@ -13,7 +18,7 @@ export default function Todolist() {
       dueDate: "12th of september 2024",
       isCompleted: false,
       completedAt: false,
-      createdAt: '4th septemeber',
+      createdAt: "4th septemeber",
     },
     {
       id: 1,
@@ -23,7 +28,7 @@ export default function Todolist() {
       dueDate: "12th of december 2024",
       isCompleted: false,
       completedAt: false,
-      createdAt: '4th septemeber',
+      createdAt: "4th septemeber",
     },
     {
       id: 2,
@@ -33,7 +38,7 @@ export default function Todolist() {
       dueDate: "12th of october 2024",
       isCompleted: true,
       completedAt: new Date().toLocaleDateString(),
-      createdAt: '4th septemeber',
+      createdAt: "4th septemeber",
     },
   ]);
 
@@ -50,7 +55,7 @@ export default function Todolist() {
           completedAt: !todo.completedAt
             ? new Date().toLocaleDateString()
             : false,
-            createdAt: todo.createdAt,
+          createdAt: todo.createdAt,
         };
       }
 
@@ -79,35 +84,80 @@ export default function Todolist() {
     setTodolist(newTodolist);
   };
 
+  const handleDelete = (id: number) => {
+    const newTodolist = todolist.filter((todo) => todo.id !== id);
+    setTodolist(newTodolist);
+  };
+
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  function toggleDialog() {
+    if (!dialogRef.current) {
+      return;
+    }
+    dialogRef.current.hasAttribute("open");
+    dialogRef.current.close();
+    dialogRef.current.showModal();
+  }
+
+  function modalClose() {
+    dialogRef.current?.close();
+  }
+  
   return (
     <div>
+      <div>
+        <h1 className="head">
+          <button onClick={toggleDialog}>Todolist</button>
+          <dialog ref={dialogRef}>
+          
+            <div className="cover">
+              <AddTodo onAddTodo={handleAddTodo} />
+
+              <div className="but">
+                <button onClick={modalClose}>close</button>
+              </div>
+            </div>
+        
+           
+          </dialog>
+      
+        </h1>
+      </div>
+      
+
       <ul className="todolist">
         {todolist
 
           .sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted))
           .map((todo) => (
             <li key={todo.id}>
+              <div className="trt">
+                <button onClick={() => handleDelete(todo.id)}>Delete</button>
+              </div>
               <div className="todolistitem">
+                <div className="no">
                 {todo.title}
-
-               <p>
-                created at {todo.createdAt}</p>
+                </div>
+                <div className="do">
+                  <p>created at {todo.createdAt}</p>
+                </div>
 
                 {todo.isCompleted && (
                   <p className="completedAt">completedAt:{todo.completedAt}</p>
                 )}
                 <p>{todo.description}</p>
                 <p>{todo.dueDate}</p>
+                <p>
                 <input
                   type="checkbox"
                   checked={todo.isCompleted}
                   onChange={() => handleCheckbox(todo.id)}
                 />
+                </p>
               </div>
             </li>
           ))}
       </ul>
-      <AddTodo onAddTodo={handleAddTodo} />
     </div>
   );
 }

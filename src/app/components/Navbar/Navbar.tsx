@@ -3,8 +3,11 @@ import "./Navbar.css";
 
 export default function Navbar() {
   return (
+    <div className='try'>
     <nav>
+      
       <ul>
+    
         <li>
           <Link href='/'>Home</Link>
         </li>
@@ -13,8 +16,10 @@ export default function Navbar() {
           <li>
             <Link href= '/featured-cars'>Featured cars</Link>
           </li>
-        
+          
       </ul>
+     
     </nav>
+    </div>
   );
 }
